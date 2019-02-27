@@ -18,9 +18,9 @@ const userSchema = new Schema(
       enum: ["Male", "Female", "Undefined", "Prefer not to say"]
     }
     // facebookAccount: { type: String },
-    // following: [{ following: { type: Schema.Types.ObjectId }, ref: "User" }],
-    // followers: [{ follower: { type: Schema.Types.ObjectId }, ref: "User" }],
-    // taggedPics: [{ post: { type: Schema.Types.ObjectId }, ref: "Post" }]
+    // following: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    // followers: [{  type: Schema.Types.ObjectId , ref: "User" }],
+    // taggedPics: [{ type: Schema.Types.ObjectId , ref: "Post" }]
   },
   {
     timestamps: true

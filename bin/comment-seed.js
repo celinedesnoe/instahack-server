@@ -4,9 +4,8 @@ const mongoose = require("mongoose");
 const Comment = require("../models/comment-model.js");
 const someComments = [
   {
-    _id: { type: String },
-    username_id: { usernameId: { type: Schema.Types.ObjectId }, ref: "User" },
-    post_id: { postId: { type: Schema.Types.ObjectId }, ref: "Post" },
+    // username_id: "5c76cfd6dab4194575c542f9",
+    // post_id: "5c76d13806973146129e7960",
     content: "Me too I want to go to Sichuan and eat all food"
   }
 ];
