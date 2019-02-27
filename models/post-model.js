@@ -6,13 +6,14 @@ const postSchema = new Schema(
   {
     _id: { type: String },
     username_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+
     image: { type: String, required: true },
     caption: { type: String } //  hashtags, @users
-    // likedBy: [{  type: Schema.Types.ObjectId , ref: "User" }]
+    // likedBy: [{ type: mongoose.Schema.Types.ObjectId , ref: "User" }]
     // ##########
     // POSSIBLE ADDITIONAL
     // localisation: { type: String },
-    // taggedAccounts: [{ type: Schema.Types.ObjectId , ref: "User" }]
+    // taggedAccounts: [{ type: mongoose.Schema.Types.ObjectId , ref: "User" }]
     // replies
     // likes
   },

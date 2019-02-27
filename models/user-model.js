@@ -19,8 +19,8 @@ const userSchema = new Schema(
     }
     // facebookAccount: { type: String },
     // following: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    // followers: [{  type: Schema.Types.ObjectId , ref: "User" }],
-    // taggedPics: [{ type: Schema.Types.ObjectId , ref: "Post" }]
+    // followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    // taggedPics: [{ type: Schema.Types.ObjectId, ref: "Post" }]
   },
   {
     timestamps: true
