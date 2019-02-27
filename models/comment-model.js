@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 const commentSchema = new Schema(
   {
     _id: { type: String },
-    username_id: { usernameId: { type: Schema.Types.ObjectId }, ref: "User" },
-    post_id: { postId: { type: Schema.Types.ObjectId }, ref: "Post" },
+    // username_id: { usernameId: { type: Schema.Types.ObjectId }, ref: "User" },
+    // post_id: { postId: { type: Schema.Types.ObjectId }, ref: "Post" },
     content: { type: String, required: true }
   },
   {

@@ -16,11 +16,11 @@ const userSchema = new Schema(
     gender: {
       type: String,
       enum: ["Male", "Female", "Undefined", "Prefer not to say"]
-    },
+    }
     // facebookAccount: { type: String },
-    following: [{ following: { type: Schema.Types.ObjectId }, ref: "User" }],
-    followers: [{ follower: { type: Schema.Types.ObjectId }, ref: "User" }],
-    taggedPics: [{ post: { type: Schema.Types.ObjectId }, ref: "Post" }]
+    // following: [{ following: { type: Schema.Types.ObjectId }, ref: "User" }],
+    // followers: [{ follower: { type: Schema.Types.ObjectId }, ref: "User" }],
+    // taggedPics: [{ post: { type: Schema.Types.ObjectId }, ref: "Post" }]
   },
   {
     timestamps: true

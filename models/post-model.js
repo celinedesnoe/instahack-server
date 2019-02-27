@@ -5,10 +5,11 @@ const Schema = mongoose.Schema;
 const postSchema = new Schema(
   {
     _id: { type: String },
-    username_id: { usernameId: { type: Schema.Types.ObjectId }, ref: "User" },
+    poster_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+
     image: { type: String, required: true },
-    caption: { type: String }, //  hashtags, @users
-    likedBy: [{ liker: { type: Schema.Types.ObjectId }, ref: "User" }]
+    caption: { type: String } //  hashtags, @users
+    // likedBy: [{ liker: { type: Schema.Types.ObjectId }, ref: "User" }]
     // ##########
     // POSSIBLE ADDITIONAL
     // localisation: { type: String },
@@ -21,7 +22,7 @@ const postSchema = new Schema(
   }
 );
 
-const Post = mongoose.model("User", postSchema);
+const Post = mongoose.model("Post", postSchema);
 module.exports = Post;
 
 // // ###################################################
