@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const Comment = require("../models/comment-model.js");
 const someComments = [
   {
-    username_id: "5c76c98c12f1c7eb241e47ed", // copy/paste a username_id,
-    post_id: "5c76cf13dddc6cec5b543403", // copy/paste a post ID,
+    username_id: "5c76c98c12f1c7eb241e47ed", // copy/paste a username_id from your own database,
+    post_id: "5c76cf13dddc6cec5b543403", // copy/paste a post ID from your own database,
     content: "Me too I want to go to Sichuan and eat all food"
   }
 ];

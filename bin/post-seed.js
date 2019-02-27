@@ -5,7 +5,7 @@ const Post = require("../models/post-model.js");
 const somePosts = [
   {
     // "Nizaroni"
-    username_id: "5c76c98c12f1c7eb241e47ed",
+    // username_id: "5c76cfd6dab4194575c542f9",
     image:
       "https://livekindlyproduction-8u6efaq1lwo6x9a.stackpathdns.com/wp-content/uploads/2017/07/dominospizza.png",
     caption: "Hmmmm cheese" //  hashtags, @users
