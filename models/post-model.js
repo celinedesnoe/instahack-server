@@ -5,15 +5,15 @@ const Schema = mongoose.Schema;
 const postSchema = new Schema(
   {
     _id: { type: String },
-    poster_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    username_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 
     image: { type: String, required: true },
     caption: { type: String } //  hashtags, @users
-    // likedBy: [{ liker: { type: Schema.Types.ObjectId }, ref: "User" }]
+    // likedBy: [{ type: mongoose.Schema.Types.ObjectId , ref: "User" }]
     // ##########
     // POSSIBLE ADDITIONAL
     // localisation: { type: String },
-    // taggedAccounts: [{ taggedUser: { type: Schema.Types.ObjectId }, ref: "User" }]
+    // taggedAccounts: [{ type: mongoose.Schema.Types.ObjectId , ref: "User" }]
     // replies
     // likes
   },
