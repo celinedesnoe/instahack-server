@@ -3,6 +3,61 @@ const User = require("../models/user-model.js");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 
+function checkEmail(emailToCheck) {
+  User.findOne({ email: { $eq: emailToCheck } })
+    .then(userDoc => {
+      if (userDoc) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch(err => next(err));
+}
+
+function checkUsername(usernameToCheck) {
+  User.findOne({ username: { $eq: usernameToCheck } })
+    .then(userDoc => {
+      if (userDoc) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch(err => next(err));
+}
+
+function checkPassword(givenPassword) {
+  const passwordToCheck = bcrypt.hashSync(givenPassword, 10);
+  User.findOne({ encryptedPassword: { $eq: passwordToCheck } })
+    .then(userDoc => {
+      if (userDoc) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch(err => next(err));
+}
+
+router.post("/process-email", (req, res, next) => {
+  const { email } = req.body;
+
+  if (checkEmail(email)) {
+    next(new Error("That email is already associated with an account."));
+    return;
+  }
+});
+
+router.post("/process-username", (req, res, next) => {
+  const { username } = req.body;
+
+  if (checkUsername(username)) {
+    next(new Error("That username is taken."));
+    return;
+  }
+});
+
 router.post("/process-signup", (req, res, next) => {
   const { fullName, username, email, originalPassword } = req.body;
   // return console.log(fullName, username, email, originalPassword);
@@ -28,7 +83,6 @@ router.post("/process-signup", (req, res, next) => {
       });
     })
     .catch(err => next(err));
-  // return res.send("so far so food");
 });
 
 // ************************
