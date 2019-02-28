@@ -65,4 +65,7 @@ app.use(passport.session());
 const auth = require("./routes/auth-router.js");
 app.use("/api", auth);
 
+const post = require("./routes/post-router.js");
+app.use("/api", post);
+
 module.exports = app;
