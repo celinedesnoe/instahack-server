@@ -15,10 +15,10 @@ const userSchema = new Schema(
     gender: {
       type: String,
       enum: ["Male", "Female", "Undefined", "Prefer not to say"]
-    }
+    },
     // facebookAccount: { type: String },
-    // following: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    // followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    followers: [{ type: Schema.Types.ObjectId, ref: "User" }]
     // taggedPics: [{ type: Schema.Types.ObjectId, ref: "Post" }]
   },
   {

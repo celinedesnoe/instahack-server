@@ -16,4 +16,13 @@ router.post("/posts", (req, res, next) => {
   // console.log("The posts from the current user is :", postResults);
 });
 
+router.get("/p/:postId", (req, res, next) => {
+  const { postId } = req.params;
+
+  Post.findById(postId)
+    .populate("username_id")
+    .then(postDoc => res.json(postDoc))
+    .catch(err => next(err));
+});
+
 module.exports = router;
