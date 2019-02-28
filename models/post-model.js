@@ -4,9 +4,7 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema(
   {
-    _id: { type: String },
     username_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-
     image: { type: String, required: true },
     caption: { type: String } //  hashtags, @users
     // likedBy: [{ type: mongoose.Schema.Types.ObjectId , ref: "User" }]

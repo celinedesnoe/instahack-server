@@ -4,7 +4,8 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 
 router.post("/process-signup", (req, res, next) => {
-  const { fullName, email, originalPassword } = req.body;
+  const { fullName, username, email, originalPassword } = req.body;
+  // return console.log(fullName, username, email, originalPassword);
 
   // enforce password rules (can't be empty and MUST have a digit)
   if (!originalPassword || !originalPassword.match(/[0-9]/)) {
@@ -12,11 +13,13 @@ router.post("/process-signup", (req, res, next) => {
     return;
   }
 
+  // return res.send(JSON.stringify(originalPassword));
+
   // encrypt the user's password before saving it
   const encryptedPassword = bcrypt.hashSync(originalPassword, 10);
-  // return res.send("so far so good");
+  // return res.send(JSON.stringify(encryptedPassword));
 
-  User.create({ fullName, email, encryptedPassword })
+  User.create({ fullName, username, email, encryptedPassword })
     .then(userDoc => {
       req.logIn(userDoc, () => {
         // hide encrypted password before sending the JSON (it's a security risk)
@@ -25,6 +28,7 @@ router.post("/process-signup", (req, res, next) => {
       });
     })
     .catch(err => next(err));
+  // return res.send("so far so food");
 });
 
 // ************************
