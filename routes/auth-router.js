@@ -37,6 +37,7 @@ router.post("/process-signup", (req, res, next) => {
 
 router.post("/process-login", (req, res, next) => {
   const { email, originalPassword } = req.body;
+  console.log("Req.body from Log In", req.body);
   // return res.send("so far so good");
 
   // validate the email by searching the database for an account with that email
