@@ -62,5 +62,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // all routes in the phone router will start with "/api"
+const auth = require("./routes/auth-router.js");
+app.use("/api", auth);
 
 module.exports = app;
