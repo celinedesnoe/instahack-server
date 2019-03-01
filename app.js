@@ -68,4 +68,7 @@ app.use("/api", auth);
 const post = require("./routes/post-router.js");
 app.use("/api", post);
 
+const profile = require("./routes/profile-router.js");
+app.use("/api", profile);
+
 module.exports = app;
