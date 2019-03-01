@@ -10,14 +10,17 @@ const router = express.Router();
 // ########################################
 
 router.get("/:username", (req, res, next) => {
-  const { username } = req.params;
-  console.log("Back end username sent", username); //OK got the username
+  const { username } = req.params; //retrieve username
 
   User.findOne({ username: { $eq: username } })
     .then(userDoc => {
+      // from userDoc get the posts with userDoc._id
       Post.find({ username_id: { $eq: userDoc._id } })
         .then(postResults => {
+          // for security reason, never send password to the front
           userDoc.encryptedPassword = undefined;
+
+          // send userDoc and postResults in the json file
           res.json({
             postResults: postResults,
             userDoc: userDoc

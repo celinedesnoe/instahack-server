@@ -4,6 +4,11 @@ const Post = require("../models/post-model.js");
 
 const router = express.Router();
 
+// ##################################################################################
+// GET DETAILS OF THE POST
+// WITH THE USER OBJECT THROUGH POPULATE ("username_id") in the field "username_id"
+// ##################################################################################
+
 router.get("/p/:postId", (req, res, next) => {
   const { postId } = req.params;
 
