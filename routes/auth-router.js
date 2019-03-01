@@ -3,8 +3,25 @@ const User = require("../models/user-model.js");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 
+// ************************
+//          SIGNUP
+// ************************
+
 router.post("/process-signup", (req, res, next) => {
-  const { fullName, username, email, originalPassword } = req.body;
+  const {
+    fullName,
+    username,
+    email,
+    originalPassword,
+    bio,
+    website,
+    profilePic,
+    phoneNumber,
+    gender,
+    following,
+    followers,
+    taggedPics
+  } = req.body;
   // return console.log(fullName, username, email, originalPassword);
 
   // enforce password rules (can't be empty and MUST have a digit)
@@ -19,7 +36,20 @@ router.post("/process-signup", (req, res, next) => {
   const encryptedPassword = bcrypt.hashSync(originalPassword, 10);
   // return res.send(JSON.stringify(encryptedPassword));
 
-  User.create({ fullName, username, email, encryptedPassword })
+  User.create({
+    fullName,
+    username,
+    email,
+    bio,
+    website,
+    profilePic,
+    phoneNumber,
+    gender,
+    following,
+    followers,
+    taggedPics,
+    encryptedPassword
+  })
     .then(userDoc => {
       req.logIn(userDoc, () => {
         // hide encrypted password before sending the JSON (it's a security risk)
@@ -90,6 +120,42 @@ router.get("/logout", (req, res, next) => {
 
   // send some JSON to the client
   res.json({ message: "You are logged out!" });
+});
+
+// ************************
+//          EDIT
+// ************************
+
+router.post("/process-edit", (req, res, next) => {
+  const {
+    fullName,
+    username,
+    email,
+    bio,
+    website,
+    profilePic,
+    phoneNumber,
+    gender
+  } = req.body.newInfo;
+
+  const { _id } = req.body.oldInfo;
+
+  User.findByIdAndUpdate(_id, {
+    fullName: fullName,
+    username: username,
+    email: email,
+    bio: bio,
+    website: website,
+    profilePic: profilePic,
+    phoneNumber: phoneNumber,
+    gender: gender
+  })
+    .then(userDoc => {
+      // hide encrypted password before sending the JSON (it's a security risk)
+      userDoc.encryptedPassword = undefined;
+      res.json(userDoc);
+    })
+    .catch(err => next(err));
 });
 
 module.exports = router;
