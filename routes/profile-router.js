@@ -31,4 +31,47 @@ router.get("/:username", (req, res, next) => {
     .catch(err => next(err));
 });
 
+// #################################################
+// PROCESS UN-FOLLOW
+// #################################################
+
+router.post("/process-unfollow", (req, res, next) => {
+  const { profileUser, currentUser } = req.body;
+  console.log("CurrentUser id", currentUser._id);
+  console.log("ProfileUser id", profileUser._id);
+
+  User.findByIdAndUpdate(currentUser._id, {
+    $pull: { following: profileUser._id }
+  })
+    .then(userDoc => {
+      // hide encrypted password before sending the JSON (it's a security risk)
+      userDoc.encryptedPassword = undefined;
+      res.json({ userDoc: userDoc });
+      console.log("CurrentUser update following", userDoc.following);
+    })
+    .catch(err => next(err));
+});
+
+// #################################################
+// PROCESS FOLLOW
+// #################################################
+
+router.post("/process-follow", (req, res, next) => {
+  const { profileUser, currentUser } = req.body;
+  console.log("CurrentUser id", currentUser._id);
+  console.log("ProfileUser id", profileUser._id);
+
+  User.findByIdAndUpdate(currentUser._id, {
+    $push: { following: profileUser._id }
+  })
+
+    .then(userDoc => {
+      // hide encrypted password before sending the JSON (it's a security risk)
+      userDoc.encryptedPassword = undefined;
+      res.json({ userDoc: userDoc });
+      console.log("CurrentUser update following", userDoc.following);
+    })
+    .catch(err => next(err));
+});
+
 module.exports = router;
