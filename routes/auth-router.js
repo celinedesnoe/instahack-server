@@ -126,38 +126,36 @@ router.get("/logout", (req, res, next) => {
 //          EDIT
 // ************************
 
-router
-  .post("/process-edit", (req, res, next) => {
-    const {
-      _id,
-      fullName,
-      username,
-      email,
-      bio,
-      website,
-      profilePic,
-      phoneNumber,
-      gender
-    } = req.body;
+router.post("/process-edit", (req, res, next) => {
+  const {
+    fullName,
+    username,
+    email,
+    bio,
+    website,
+    profilePic,
+    phoneNumber,
+    gender
+  } = req.body.newInfo;
 
-    User.findByIdAndUpdate(
-      { _id: { $eq: _id } },
-      {
-        fullName: { $eq: fullName },
-        username: { $eq: username },
-        email: { $eq: email },
-        bio: { $eq: bio },
-        website: { $eq: website },
-        profilePic: { $eq: profilePic },
-        phoneNumber: { $eq: phoneNumber },
-        gender: { $eq: gender }
-      }
-    ).then(userDoc => {
+  const { _id } = req.body.oldInfo;
+
+  User.findByIdAndUpdate(_id, {
+    fullName: fullName,
+    username: username,
+    email: email,
+    bio: bio,
+    website: website,
+    profilePic: profilePic,
+    phoneNumber: phoneNumber,
+    gender: gender
+  })
+    .then(userDoc => {
       // hide encrypted password before sending the JSON (it's a security risk)
       userDoc.encryptedPassword = undefined;
       res.json(userDoc);
-    });
-  })
-  .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
 
 module.exports = router;
