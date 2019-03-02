@@ -37,8 +37,9 @@ router.get("/:username", (req, res, next) => {
 
 router.post("/process-unfollow", (req, res, next) => {
   const { profileUser, currentUser } = req.body;
-  // console.log("CurrentUser id", currentUser._id);
-  // console.log("ProfileUser id", profileUser._id);
+  console.log("CurrentUser id", currentUser._id);
+  console.log("CurrentUser foolowing", currentUser.following);
+  console.log("ProfileUser id", profileUser._id);
 
   User.findByIdAndUpdate(currentUser._id, {
     $pull: { following: profileUser._id }
@@ -68,16 +69,27 @@ router.post("/process-unfollow", (req, res, next) => {
 router.post("/process-follow", (req, res, next) => {
   const { profileUser, currentUser } = req.body;
   console.log("CurrentUser id", currentUser._id);
+  console.log("CurrentUser foolowing", currentUser.following);
   console.log("ProfileUser id", profileUser._id);
+  console.log("ProfileUser followers", profileUser.follower);
 
   User.findByIdAndUpdate(currentUser._id, {
-    $push: { followers: profileUser._id }
+    $push: { following: profileUser._id }
   })
-    .then(userDoc => {
-      // hide encrypted password before sending the JSON (it's a security risk)
-      userDoc.encryptedPassword = undefined;
-      res.json({ userDoc: userDoc });
-      console.log("CurrentUser update follower", userDoc.followers);
+    .then(currentUserDoc => {
+      User.findByIdAndUpdate(profileUser._id, {
+        $push: { followers: currentUser._id }
+      })
+        .then(profileUserDoc => {
+          // hide encrypted password before sending the JSON (it's a security risk)
+          profileUserDoc.encryptedPassword = undefined;
+          currentUserDoc.encryptedPassword = undefined;
+          res.json({
+            currentUserDoc: currentUserDoc,
+            profileUserDoc: profileUserDoc
+          });
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
