@@ -62,14 +62,13 @@ router.post("/process-follow", (req, res, next) => {
   console.log("ProfileUser id", profileUser._id);
 
   User.findByIdAndUpdate(currentUser._id, {
-    $push: { following: profileUser._id }
+    $push: { followers: profileUser._id }
   })
-
     .then(userDoc => {
       // hide encrypted password before sending the JSON (it's a security risk)
       userDoc.encryptedPassword = undefined;
       res.json({ userDoc: userDoc });
-      console.log("CurrentUser update following", userDoc.following);
+      console.log("CurrentUser update follower", userDoc.followers);
     })
     .catch(err => next(err));
 });
