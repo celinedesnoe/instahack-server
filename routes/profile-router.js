@@ -31,6 +31,23 @@ router.get("/:username", (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.get("/:username/followers", (req, res, next) => {
+  const { username } = req.params; //retrieve username
+  User.findOne({ username: { $eq: username } })
+    .populate("followers")
+    .populate("following")
+    .then(userDoc => {
+      // from userDoc get the posts with userDoc._id
+      userDoc.encryptedPassword = undefined;
+      // send userDoc and postResults in the json file
+      res.json({
+        userDoc: userDoc
+      });
+      console.log(userDoc);
+    })
+    .catch(err => next(err));
+});
+
 // #################################################
 // PROCESS UN-FOLLOW
 // #################################################
