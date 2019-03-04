@@ -53,7 +53,8 @@ router.get("/:username/followers", (req, res, next) => {
 // #################################################
 
 router.post("/process-unfollow", (req, res, next) => {
-  const { profileUser, currentUser } = req.body;
+  const { profileUser } = req.body;
+  const currentUser = req.user;
 
   User.findByIdAndUpdate(
     currentUser._id,
@@ -99,7 +100,8 @@ router.post("/process-unfollow", (req, res, next) => {
 // #################################################
 
 router.post("/process-follow", (req, res, next) => {
-  const { profileUser, currentUser } = req.body;
+  const { profileUser } = req.body;
+  const currentUser = req.user;
 
   User.findByIdAndUpdate(
     currentUser._id,
