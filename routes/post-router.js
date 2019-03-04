@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user-model.js");
 const Post = require("../models/post-model.js");
+const Comment = require("../models/comment-model.js");
 
 const router = express.Router();
 
@@ -14,7 +15,11 @@ router.get("/p/:postId", (req, res, next) => {
 
   Post.findById(postId)
     .populate("username_id")
-    .then(postDoc => res.json(postDoc))
+    .then(postDoc => {
+      Comment.find({ post_id: { $eq: postId } })
+        .then(commentDoc => res.json({ post: postDoc, comments: commentDoc }))
+        .catch(err => next(err));
+    })
     .catch(err => next(err));
 });
 
