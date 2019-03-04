@@ -58,4 +58,12 @@ router.get("/p/:postId", (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.post("/process-comment", (req, res, next) => {
+  const { username_id, post_id, content } = req.body;
+
+  Comment.create({ username_id, post_id, content })
+    .then(commentDoc => res.json(commentDoc))
+    .next(err => next(err));
+});
+
 module.exports = router;
