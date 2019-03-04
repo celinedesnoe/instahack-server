@@ -53,9 +53,9 @@ router.get("/:username/followers", (req, res, next) => {
 // #################################################
 
 router.post("/process-unfollow", (req, res, next) => {
-  const { profileUser } = req.body;
+  const profileUser = req.body;
   const currentUser = req.user;
-
+  console.log("The profile user we are on", profileUser);
   User.findByIdAndUpdate(
     currentUser._id,
     {
@@ -100,9 +100,9 @@ router.post("/process-unfollow", (req, res, next) => {
 // #################################################
 
 router.post("/process-follow", (req, res, next) => {
-  const { profileUser } = req.body;
+  const profileUser = req.body;
   const currentUser = req.user;
-
+  console.log("The profile user we are on", profileUser);
   User.findByIdAndUpdate(
     currentUser._id,
     {
@@ -126,12 +126,12 @@ router.post("/process-follow", (req, res, next) => {
             currentUserDoc: currentUserDoc,
             profileUserDoc: profileUserDoc
           });
-          console.log(
-            "Current User following",
-            currentUserDoc.following,
-            "Profile User follower",
-            profileUserDoc.followers
-          );
+          // console.log(
+          //   "Current User following",
+          //   currentUserDoc.following,
+          //   "Profile User follower",
+          //   profileUserDoc.followers
+          // );
         })
         .catch(err => next(err));
     })
