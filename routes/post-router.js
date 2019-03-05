@@ -16,11 +16,6 @@ router.get("/p/:postId", (req, res, next) => {
   Post.findById(postId)
     .populate("username_id")
     .then(postDoc => {
-      var likeState = false;
-      if (postDoc.likedBy.indexOf() > -1) {
-        likeState = true;
-      }
-
       Comment.find({ post_id: { $eq: postId } })
         .sort({ createdAt: -1 })
         .populate("username_id")
@@ -40,7 +35,12 @@ router.post("/process-comment", (req, res, next) => {
   const { username_id, post_id, content } = req.body;
 
   Comment.create({ username_id, post_id, content })
-    .then(commentDoc => res.json(commentDoc))
+    .then(commentDoc => {
+      Comment.findById(commentDoc._id)
+        .populate("username_id")
+        .then(newComment => res.json(newComment))
+        .catch(err => next(err));
+    })
     .catch(err => next(err));
 });
 
