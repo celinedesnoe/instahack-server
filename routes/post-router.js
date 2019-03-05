@@ -14,11 +14,12 @@ router.get("/p/:postId", (req, res, next) => {
   const { postId } = req.params;
   // return res.send(currentUser);
   Post.findById(postId)
-    .populate("username_id")
+    .populate("username_id", "profilePic username")
+    .populate("likedBy", "profilePic followers")
     .then(postDoc => {
       Comment.find({ post_id: { $eq: postId } })
         .sort({ createdAt: -1 })
-        .populate("username_id")
+        .populate("username_id", "username")
         .then(commentResults => {
           res.json({ post: postDoc, comments: commentResults });
         })
@@ -26,6 +27,23 @@ router.get("/p/:postId", (req, res, next) => {
     })
     .catch(err => next(err));
 });
+
+// router.get("/p/:postId", (req, res, next) => {
+//   const { postId } = req.params;
+//   // return res.send(currentUser);
+//   Post.findById(postId)
+//     .populate("username_id")
+//     .then(postDoc => {
+//       Comment.find({ post_id: { $eq: postId } })
+//         .sort({ createdAt: -1 })
+//         .populate("username_id")
+//         .then(commentResults => {
+//           res.json({ post: postDoc, comments: commentResults });
+//         })
+//         .catch(err => next(err));
+//     })
+//     .catch(err => next(err));
+// });
 
 // ##################################################################################
 // ADD COMMENT (NEW COLLECTION -- TAKES COMMENTER, POST, AND COMMENT CONTENT)
