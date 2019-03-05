@@ -41,7 +41,7 @@ router.post("/process-comment", (req, res, next) => {
 
   Comment.create({ username_id, post_id, content })
     .then(commentDoc => res.json(commentDoc))
-    .next(err => next(err));
+    .catch(err => next(err));
 });
 
 // ##################################################################################
@@ -54,8 +54,13 @@ router.post("/process-like", (req, res, next) => {
   // return res.send(post);
   // return res.send(liker);
 
-  Post.findByIdAndUpdate(post, { $push: { likedBy: liker } })
-    .then(postDoc => res.json(postDoc))
+  console.log("LIKE: REQBODY in BACK: ", req.body);
+
+  Post.findByIdAndUpdate(post, { $push: { likedBy: liker } }, { new: true })
+    .then(postDoc => {
+      console.log("LIKE: POSTDOC in BACK: ", postDoc);
+      res.json(postDoc);
+    })
     .catch(err => next(err));
 });
 
@@ -66,11 +71,14 @@ router.post("/process-like", (req, res, next) => {
 router.post("/process-unlike", (req, res, next) => {
   const { post, unliker } = req.body;
 
+  console.log("UNLIKE: REQBODY in BACK: ", req.body);
+
   // return res.send(post);
   // return res.send(liker);
 
-  Post.findByIdAndUpdate(post, { $pull: { likedBy: unliker } })
+  Post.findByIdAndUpdate(post, { $pull: { likedBy: unliker } }, { new: true })
     .then(postDoc => {
+      console.log("LIKE: POSTDOC in BACK: ", postDoc);
       res.json(postDoc);
     })
     .catch(err => next(err));

@@ -1,6 +1,6 @@
 const express = require("express");
 const fileUploader = require("../config/file-uploader.js");
-const router = expres.Router();
+const router = express.Router();
 
 router.post(
   "/single-upload",
