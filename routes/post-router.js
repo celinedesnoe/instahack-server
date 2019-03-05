@@ -41,7 +41,7 @@ router.post("/process-comment", (req, res, next) => {
 
   Comment.create({ username_id, post_id, content })
     .then(commentDoc => res.json(commentDoc))
-    .next(err => next(err));
+    .catch(err => next(err));
 });
 
 // ##################################################################################
