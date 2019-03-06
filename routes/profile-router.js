@@ -13,9 +13,11 @@ router.get("/:username", (req, res, next) => {
   const { username } = req.params; //retrieve username
 
   User.findOne({ username: { $eq: username } })
+
     .then(userDoc => {
       // from userDoc get the posts with userDoc._id
       Post.find({ username_id: { $eq: userDoc._id } })
+        .sort({ createdAt: -1 })
         .then(postResults => {
           // for security reason, never send password to the front
           userDoc.encryptedPassword = undefined;
