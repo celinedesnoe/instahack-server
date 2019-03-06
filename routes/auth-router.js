@@ -37,9 +37,10 @@ router.post("/process-signup", (req, res, next) => {
   // return res.send(JSON.stringify(encryptedPassword));
 
   User.create({
-    fullName,
     username,
+    fullName,
     email,
+    encryptedPassword,
     bio,
     website,
     profilePic,
@@ -47,8 +48,7 @@ router.post("/process-signup", (req, res, next) => {
     gender,
     following,
     followers,
-    taggedPics,
-    encryptedPassword
+    taggedPics
   })
     .then(userDoc => {
       req.logIn(userDoc, () => {

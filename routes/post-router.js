@@ -102,4 +102,64 @@ router.post("/process-unlike", (req, res, next) => {
     .catch(err => next(err));
 });
 
+// ##################################################################################
+// RENDER ALL POSTS IN NEWSFEED
+// ##################################################################################
+
+router.post("/process-newsfeed", (req, res, next) => {
+  console.log("BEGINNING OF PROCESS NEWSFEED");
+
+  // get following from currentUser (sent in req.body)
+  const { following } = req.body;
+
+  // return console.log(following);
+  Post.find({ username_id: { $in: following } })
+    .populate("username_id", "profilePic username")
+    .populate("username_id.likedBy", "profilePic followers")
+    .then(postDoc => {
+      return console.log("THIS IS POSTDOC: ", postDoc);
+
+      // Comment.find({ post_id: { $eq: postDoc._id } })
+      //   .sort({ createdAt: -1 })
+      //   .populate("username_id", "username")
+      //   .then(commentResults => {
+      //     res.json({ post: postDoc, comments: commentResults });
+      //   })
+      //   .catch(err => next(err));
+    })
+    .catch(err => next(err));
+
+  // return console.log(following);
+
+  // *********************************
+  // // create const to be returned
+  // var newsfeedPosts = [];
+
+  // // populate const with post data for all users being followed
+  // following.forEach(oneUser => {
+  //   // return console.log("so far so good");
+  //   // return console.log("ONEUSER IN BACK: ", oneUser);
+
+  //   Post.find({ username_id: { $eq: oneUser } })
+  //     .sort({ createdAt: -1 })
+  //     .then(userPosts => {
+  //       // return console.log("so far so good");
+  //       // return console.log("USER POSTS IN BACK: ", userPosts);
+
+  //       console.log("NEW USER");
+
+  //       newsfeedPosts.push(userPosts);
+  //       // newsfeedPosts.push(userPosts).sort({ createdAt: -1 });
+  //       // return console.log(userPosts);
+  //       return console.log(newsfeedPosts);
+  //     })
+  //     .catch(err => next(err));
+  // });
+  // // return console.log("so far so good");
+  // // return console.log(newsfeedPosts);
+
+  // // returnArray.push(newsfeedPosts);
+  // res.json(newsfeedPosts);
+});
+
 module.exports = router;
