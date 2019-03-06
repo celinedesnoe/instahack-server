@@ -102,4 +102,22 @@ router.post("/process-unlike", (req, res, next) => {
     .catch(err => next(err));
 });
 
+// ##################################################################################
+// CREATE A POST
+// ##################################################################################
+
+router.post("/process-post", (req, res, next) => {
+  const { username_id, image, caption } = req.body;
+  console.log("REQ.BODY", req.body);
+  Post.create({ username_id, image, caption })
+    .then(postDoc => {
+      res.json(postDoc);
+    })
+    .catch(err => next(err));
+});
+
+// export function newPost(newPost) {
+//   return backendApi.post("/api/process-post", newPost).catch(errorHandler);
+// }
+
 module.exports = router;
