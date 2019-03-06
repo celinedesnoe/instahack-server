@@ -18,7 +18,7 @@ router.get("/p/:postId", (req, res, next) => {
     .populate("likedBy", "profilePic followers")
     .then(postDoc => {
       Comment.find({ post_id: { $eq: postId } })
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: 1 })
         .populate("username_id", "username")
         .then(commentResults => {
           res.json({ post: postDoc, comments: commentResults });
@@ -100,6 +100,38 @@ router.post("/process-unlike", (req, res, next) => {
       res.json(postDoc);
     })
     .catch(err => next(err));
+});
+
+// ##################################################################################
+// RENDER ALL POSTS IN NEWSFEED
+// ##################################################################################
+
+router.post("/process-newsfeed", (req, res, next) => {
+  console.log("BEGINNING OF PROCESS NEWSFEED");
+
+  // get following from currentUser (sent in req.body)
+  const { following } = req.body;
+
+  // return console.log(following);
+
+  // find all Posts for each user in the following array
+  Post.find({ username_id: { $in: following } })
+    .sort({ createdAt: -1 })
+    .then(postDocs => {
+      // ***********************************
+      // returns an array with all Posts from all users currentUser follows
+      // need only the IDs to inform PostDetailPage
+      // ***********************************
+      const postIds = [];
+      postDocs.forEach(onePost => {
+        postIds.push(onePost._id);
+      });
+
+      // ***********************************
+      // send array of post IDs
+      // ***********************************
+      res.json(postIds);
+    });
 });
 
 // ##################################################################################
