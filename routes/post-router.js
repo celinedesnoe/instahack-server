@@ -115,107 +115,41 @@ router.post("/process-newsfeed", (req, res, next) => {
   // return console.log(following);
 
   // find all Posts for each user in the following array
-  // populate the profilePic & username (will be used in post)
-  // populate the profilePic & followers for all people who like (to be shown in the LikeList component)
   Post.find({ username_id: { $in: following } })
     .sort({ createdAt: -1 })
     .then(postDocs => {
       // ***********************************
-      // this returns an array that contains all Posts from all users the currentUser is Following
-      // ***********************************
-
-      // return console.log("THIS IS POSTDOC: ", postDoc.length);
-      // return console.log("THIS IS POSTDOC: ", postDoc[0]);
-      // return console.log("THIS IS POSTDOCS: ", postDocs);
-
-      // ***********************************
-      // create an array with all post IDs to serve as a reference for the next Comment query
+      // returns an array with all Posts from all users currentUser follows
+      // need only the IDs to inform PostDetailPage
       // ***********************************
       const postIds = [];
       postDocs.forEach(onePost => {
         postIds.push(onePost._id);
       });
+
+      // ***********************************
+      // send array of post IDs
+      // ***********************************
       res.json(postIds);
-      // return console.log("POST IDS: ", postIds);
-
-      //     // ***********************************
-      //     // find the Comments for each of the post objects
-      //     // ***********************************
-      //     Comment.find({ post_id: { $in: postIds } })
-      //       .limit(10)
-      //       .skip(40)
-      //       .sort({ createdAt: 1 })
-      //       .populate({ path: "username_id", model: "User" })
-      //       .then(allPostComments => {
-      //         // ***********************************
-      //         // returns an array with all Comment objects associated
-      //         //    with all Post objects from all Users in Following
-      //         // ***********************************
-      //         // return console.log("THIS IS ALLPOSTCOMMENTS: ", allPostComments);
-
-      //         // ***********************************
-      //         // initialize empty array to which all posts + comments will be pushed
-      //         // ***********************************
-      //         let newsfeedPosts = [];
-
-      //         // ***********************************
-      //         // group all comments from onePost
-      //         // ***********************************
-      //         postDocs.forEach(onePost => {
-      //           // ***********************************
-      //           // initialize empty array to which all comments for one post will be pushed
-      //           // ***********************************
-      //           let onePostComments = [];
-      //           allPostComments.forEach(oneComment => {
-      //             console.log("POSTID in POST: ", onePost._id);
-      //             console.log("POSTID in COMMENT: ", oneComment.post_id);
-      //             if (onePost._id.equals(oneComment.post_id)) {
-      //               // return console.log("ONE POST COMMENTS: ", onePostComments);
-      //               return console.log("MATCH");
-      //               onePostComments.push(oneComment);
-      //             }
-      //             // return console.log("ONE POST COMMENTS: ", onePostComments);
-
-      //             // ***********************************
-      //             // push onePostComments and onePost to newsfeedPosts in the format taken by PostDetailPage
-      //             // ***********************************
-      //             // return console.log("NEWSFEED POSTS: ", newsfeedPosts);
-      //             // newsfeedPosts.push({ whatever });
-      //           });
-      //           // return console.log("ONE POST COMMENTS: ", onePostComments);
-      //         });
-      //       })
-      //       .catch(err => next(err));
-
-      //     postDocs.forEach(onePost => {
-      //       // Comment.find({ post_id: { $in: postIds } })
-      //       //   .sort({ createdAt: 1 })
-      //       //   .populate("username_id", "username")
-      //       //   .then(onePostComments => {
-      //       //     // return console.log("THIS IS COMMENTRESULTS: ", onePostComments);
-      //       //     // return console.log("THIS IS ONEPOST WITH COMMENTS: ", {
-      //       //     //   post: onePost,
-      //       //     //   comments: onePostComments
-      //       //     // });
-      //       //     // ***********************************
-      //       //     // if (!res.finished) {
-      //       //     //   res.json({ post: onePost, comments: onePostComments });
-      //       //     // }
-      //       //     // *********************************
-      //       //     // postsWithComments.push({
-      //       //     //   post: onePost,
-      //       //     //   comments: onePostComments
-      //       //     // });
-      //       //     // ***********************************
-      //       //     res.json({ post: onePost, comments: onePostComments });
-      //       //     next();
-      //       //   })
-      //       //   .catch(err => next(err));
-      //     });
-      //     // return console.log("ARRAY WITH POSTS IN BACK END: ", postsWithComments);
     });
-  //   .catch(err => next(err));
-  // // return console.log("ARRAY WITH POSTS IN BACK END: ", postsWithComments);
 });
+
+// ##################################################################################
+// CREATE A POST
+// ##################################################################################
+
+router.post("/process-post", (req, res, next) => {
+  const { username_id, image, caption } = req.body;
+  console.log("REQ.BODY", req.body);
+  Post.create({ username_id, image, caption })
+    .then(postDoc => {
+      res.json(postDoc);
+    })
+    .catch(err => next(err));
+});
+
+// export function newPost(newPost) {
+//   return backendApi.post("/api/process-post", newPost).catch(errorHandler);
+// }
 
 module.exports = router;

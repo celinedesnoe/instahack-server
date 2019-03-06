@@ -71,7 +71,7 @@ app.use("/api", post);
 const profile = require("./routes/profile-router.js");
 app.use("/api", profile);
 
-// const file = require("./routes/file-router.js");
-// app.use("/api", file);
+const file = require("./routes/file-router.js");
+app.use("/api", file);
 
 module.exports = app;
