@@ -18,7 +18,7 @@ router.get("/p/:postId", (req, res, next) => {
     .populate("likedBy", "profilePic followers")
     .then(postDoc => {
       Comment.find({ post_id: { $eq: postId } })
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: 1 })
         .populate("username_id", "username")
         .then(commentResults => {
           res.json({ post: postDoc, comments: commentResults });
@@ -113,53 +113,109 @@ router.post("/process-newsfeed", (req, res, next) => {
   const { following } = req.body;
 
   // return console.log(following);
+
+  // find all Posts for each user in the following array
+  // populate the profilePic & username (will be used in post)
+  // populate the profilePic & followers for all people who like (to be shown in the LikeList component)
   Post.find({ username_id: { $in: following } })
-    .populate("username_id", "profilePic username")
-    .populate("username_id.likedBy", "profilePic followers")
-    .then(postDoc => {
-      return console.log("THIS IS POSTDOC: ", postDoc);
+    .sort({ createdAt: -1 })
+    .then(postDocs => {
+      // ***********************************
+      // this returns an array that contains all Posts from all users the currentUser is Following
+      // ***********************************
 
-      // Comment.find({ post_id: { $eq: postDoc._id } })
-      //   .sort({ createdAt: -1 })
-      //   .populate("username_id", "username")
-      //   .then(commentResults => {
-      //     res.json({ post: postDoc, comments: commentResults });
-      //   })
-      //   .catch(err => next(err));
-    })
-    .catch(err => next(err));
+      // return console.log("THIS IS POSTDOC: ", postDoc.length);
+      // return console.log("THIS IS POSTDOC: ", postDoc[0]);
+      // return console.log("THIS IS POSTDOCS: ", postDocs);
 
-  // return console.log(following);
+      // ***********************************
+      // create an array with all post IDs to serve as a reference for the next Comment query
+      // ***********************************
+      const postIds = [];
+      postDocs.forEach(onePost => {
+        postIds.push(onePost._id);
+      });
+      res.json(postIds);
+      // return console.log("POST IDS: ", postIds);
 
-  // *********************************
-  // // create const to be returned
-  // var newsfeedPosts = [];
+      //     // ***********************************
+      //     // find the Comments for each of the post objects
+      //     // ***********************************
+      //     Comment.find({ post_id: { $in: postIds } })
+      //       .limit(10)
+      //       .skip(40)
+      //       .sort({ createdAt: 1 })
+      //       .populate({ path: "username_id", model: "User" })
+      //       .then(allPostComments => {
+      //         // ***********************************
+      //         // returns an array with all Comment objects associated
+      //         //    with all Post objects from all Users in Following
+      //         // ***********************************
+      //         // return console.log("THIS IS ALLPOSTCOMMENTS: ", allPostComments);
 
-  // // populate const with post data for all users being followed
-  // following.forEach(oneUser => {
-  //   // return console.log("so far so good");
-  //   // return console.log("ONEUSER IN BACK: ", oneUser);
+      //         // ***********************************
+      //         // initialize empty array to which all posts + comments will be pushed
+      //         // ***********************************
+      //         let newsfeedPosts = [];
 
-  //   Post.find({ username_id: { $eq: oneUser } })
-  //     .sort({ createdAt: -1 })
-  //     .then(userPosts => {
-  //       // return console.log("so far so good");
-  //       // return console.log("USER POSTS IN BACK: ", userPosts);
+      //         // ***********************************
+      //         // group all comments from onePost
+      //         // ***********************************
+      //         postDocs.forEach(onePost => {
+      //           // ***********************************
+      //           // initialize empty array to which all comments for one post will be pushed
+      //           // ***********************************
+      //           let onePostComments = [];
+      //           allPostComments.forEach(oneComment => {
+      //             console.log("POSTID in POST: ", onePost._id);
+      //             console.log("POSTID in COMMENT: ", oneComment.post_id);
+      //             if (onePost._id.equals(oneComment.post_id)) {
+      //               // return console.log("ONE POST COMMENTS: ", onePostComments);
+      //               return console.log("MATCH");
+      //               onePostComments.push(oneComment);
+      //             }
+      //             // return console.log("ONE POST COMMENTS: ", onePostComments);
 
-  //       console.log("NEW USER");
+      //             // ***********************************
+      //             // push onePostComments and onePost to newsfeedPosts in the format taken by PostDetailPage
+      //             // ***********************************
+      //             // return console.log("NEWSFEED POSTS: ", newsfeedPosts);
+      //             // newsfeedPosts.push({ whatever });
+      //           });
+      //           // return console.log("ONE POST COMMENTS: ", onePostComments);
+      //         });
+      //       })
+      //       .catch(err => next(err));
 
-  //       newsfeedPosts.push(userPosts);
-  //       // newsfeedPosts.push(userPosts).sort({ createdAt: -1 });
-  //       // return console.log(userPosts);
-  //       return console.log(newsfeedPosts);
-  //     })
-  //     .catch(err => next(err));
-  // });
-  // // return console.log("so far so good");
-  // // return console.log(newsfeedPosts);
-
-  // // returnArray.push(newsfeedPosts);
-  // res.json(newsfeedPosts);
+      //     postDocs.forEach(onePost => {
+      //       // Comment.find({ post_id: { $in: postIds } })
+      //       //   .sort({ createdAt: 1 })
+      //       //   .populate("username_id", "username")
+      //       //   .then(onePostComments => {
+      //       //     // return console.log("THIS IS COMMENTRESULTS: ", onePostComments);
+      //       //     // return console.log("THIS IS ONEPOST WITH COMMENTS: ", {
+      //       //     //   post: onePost,
+      //       //     //   comments: onePostComments
+      //       //     // });
+      //       //     // ***********************************
+      //       //     // if (!res.finished) {
+      //       //     //   res.json({ post: onePost, comments: onePostComments });
+      //       //     // }
+      //       //     // *********************************
+      //       //     // postsWithComments.push({
+      //       //     //   post: onePost,
+      //       //     //   comments: onePostComments
+      //       //     // });
+      //       //     // ***********************************
+      //       //     res.json({ post: onePost, comments: onePostComments });
+      //       //     next();
+      //       //   })
+      //       //   .catch(err => next(err));
+      //     });
+      //     // return console.log("ARRAY WITH POSTS IN BACK END: ", postsWithComments);
+    });
+  //   .catch(err => next(err));
+  // // return console.log("ARRAY WITH POSTS IN BACK END: ", postsWithComments);
 });
 
 module.exports = router;
