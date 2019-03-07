@@ -110,7 +110,10 @@ router.post("/process-newsfeed", (req, res, next) => {
   console.log("BEGINNING OF PROCESS NEWSFEED");
 
   // get following from currentUser (sent in req.body)
-  const { following } = req.body;
+  const { following, _id } = req.body;
+
+  // add currentUser's id to show currentUser's posts as well
+  following.push(_id);
 
   // return console.log(following);
 

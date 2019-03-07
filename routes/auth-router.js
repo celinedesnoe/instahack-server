@@ -138,7 +138,7 @@ router.post("/process-edit", (req, res, next) => {
     gender
   } = req.body.newInfo;
 
-  const { _id } = req.body.oldInfo;
+  const { _id } = req.user;
 
   User.findByIdAndUpdate(_id, {
     fullName: fullName,
