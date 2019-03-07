@@ -152,8 +152,4 @@ router.post("/process-post", (req, res, next) => {
     .catch(err => next(err));
 });
 
-// export function newPost(newPost) {
-//   return backendApi.post("/api/process-post", newPost).catch(errorHandler);
-// }
-
 module.exports = router;
