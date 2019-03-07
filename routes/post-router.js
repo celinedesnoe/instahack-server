@@ -120,6 +120,7 @@ router.post("/process-newsfeed", (req, res, next) => {
   // find all Posts for each user in the following array
   Post.find({ username_id: { $in: following } })
     .sort({ createdAt: -1 })
+    .limit(10)
     .then(postDocs => {
       // ***********************************
       // returns an array with all Posts from all users currentUser follows
@@ -127,7 +128,7 @@ router.post("/process-newsfeed", (req, res, next) => {
       // ***********************************
       const postIds = [];
       postDocs.forEach(onePost => {
-        postIds.push(onePost._id);
+        postIds.push({ match: { params: { postId: onePost._id } } });
       });
 
       // ***********************************
