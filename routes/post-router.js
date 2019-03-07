@@ -110,7 +110,8 @@ router.post("/process-newsfeed", (req, res, next) => {
   console.log("BEGINNING OF PROCESS NEWSFEED");
 
   // get following from currentUser (sent in req.body)
-  const { following, _id } = req.body;
+  const { following, _id } = req.body.user;
+  const { nextIndex } = req.body;
 
   // add currentUser's id to show currentUser's posts as well
   following.push(_id);
@@ -120,21 +121,30 @@ router.post("/process-newsfeed", (req, res, next) => {
   // find all Posts for each user in the following array
   Post.find({ username_id: { $in: following } })
     .sort({ createdAt: -1 })
-    .limit(10)
-    .then(postDocs => {
-      // ***********************************
-      // returns an array with all Posts from all users currentUser follows
-      // need only the IDs to inform PostDetailPage
-      // ***********************************
-      const postIds = [];
-      postDocs.forEach(onePost => {
-        postIds.push({ match: { params: { postId: onePost._id } } });
-      });
+    .skip(nextIndex)
+    .limit(109)
+    .select("_id")
+    .then(postInfo => {
+      if (postInfo) {
+        // ***********************************
+        // returns an array with the post IDs for the 100 most recent posts from all users currentUser follows
+        // ***********************************
 
-      // ***********************************
-      // send array of post IDs
-      // ***********************************
-      res.json(postIds);
+        // return console.log("IDs in BACK: ", postInfo);
+
+        const postIds = [];
+        postInfo.forEach(oneId => {
+          postIds.push({ match: { params: { postId: oneId._id } } });
+        });
+        // return console.log("IDs in BACK: ", postIds);
+
+        // ***********************************
+        // send array of post IDs
+        // ***********************************
+        res.json(postIds);
+      } else {
+        res.json(null);
+      }
     });
 });
 
