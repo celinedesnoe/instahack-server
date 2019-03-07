@@ -140,16 +140,20 @@ router.post("/process-edit", (req, res, next) => {
 
   const { _id } = req.body.oldInfo;
 
-  User.findByIdAndUpdate(_id, {
-    fullName: fullName,
-    username: username,
-    email: email,
-    bio: bio,
-    website: website,
-    profilePic: profilePic,
-    phoneNumber: phoneNumber,
-    gender: gender
-  })
+  User.findByIdAndUpdate(
+    _id,
+    {
+      fullName: fullName,
+      username: username,
+      email: email,
+      bio: bio,
+      website: website,
+      profilePic: profilePic,
+      phoneNumber: phoneNumber,
+      gender: gender
+    },
+    { new: true, runValidors: true }
+  )
     .then(userDoc => {
       // hide encrypted password before sending the JSON (it's a security risk)
       userDoc.encryptedPassword = undefined;

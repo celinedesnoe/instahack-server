@@ -145,4 +145,16 @@ router.post("/process-follow", (req, res, next) => {
   // console.log("ProfileUser followers", profileUser.follower);
 });
 
+// ##################################################################################
+// SEARCH BY USERNAME
+// ##################################################################################
+
+router.get("/explore/search", (req, res, next) => {
+  User.find()
+    .then(userResults => {
+      res.json(userResults);
+    })
+    .catch(err => next(err));
+});
+
 module.exports = router;
