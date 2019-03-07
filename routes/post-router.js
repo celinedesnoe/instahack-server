@@ -15,7 +15,7 @@ router.get("/p/:postId", (req, res, next) => {
   // return res.send(currentUser);
   Post.findById(postId)
     .populate("username_id", "profilePic username")
-    .populate("likedBy", "profilePic followers")
+    .populate("likedBy", "profilePic username fullName followers following")
     .then(postDoc => {
       Comment.find({ post_id: { $eq: postId } })
         .sort({ createdAt: -1 })
