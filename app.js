@@ -41,7 +41,7 @@ app.use(
     // receive cookies from other domains/origins
     credentials: true,
     // only these domains/origins can access the API
-    origin: ["http://localhost:3000", "www.blah.com"]
+    origin: ["http://localhost:3000"]
   })
 );
 
