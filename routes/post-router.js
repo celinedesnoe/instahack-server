@@ -149,13 +149,25 @@ router.post("/process-newsfeed", (req, res, next) => {
 });
 
 // ##################################################################################
+// NEWSFEED WHEN EMPTY
+// ##################################################################################
+
+router.get("/process-newsfeed-empty", (req, res, next) => {
+  User.find()
+    .then(userResults => {
+      res.json(userResults);
+    })
+    .catch(err => next(err));
+});
+
+// ##################################################################################
 // CREATE A POST
 // ##################################################################################
 
 router.post("/process-post", (req, res, next) => {
-  const { username_id, image, caption } = req.body;
-  console.log("REQ.BODY", req.body);
-  Post.create({ username_id, image, caption })
+  const { username_id, image, caption, style } = req.body;
+  // console.log("REQ.BODY", req.body);
+  Post.create({ username_id, image, caption, style })
     .then(postDoc => {
       res.json(postDoc);
     })

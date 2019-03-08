@@ -6,6 +6,7 @@ const postSchema = new Schema(
   {
     username_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     image: { type: String, required: true },
+    style: { type: String },
     caption: { type: String },
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
     // ##########
