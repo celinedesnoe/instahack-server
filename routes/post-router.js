@@ -75,6 +75,7 @@ router.post("/process-like", (req, res, next) => {
   console.log("LIKE: REQBODY in BACK: ", req.body);
 
   Post.findByIdAndUpdate(post, { $push: { likedBy: liker } }, { new: true })
+    .populate("likedBy")
     .then(postDoc => {
       console.log("LIKE: POSTDOC in BACK: ", postDoc);
       res.json(postDoc);
@@ -95,6 +96,7 @@ router.post("/process-unlike", (req, res, next) => {
   // return res.send(liker);
 
   Post.findByIdAndUpdate(post, { $pull: { likedBy: unliker } }, { new: true })
+    .populate("likedBy")
     .then(postDoc => {
       console.log("LIKE: POSTDOC in BACK: ", postDoc);
       res.json(postDoc);
