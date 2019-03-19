@@ -22,15 +22,12 @@ router.post("/process-signup", (req, res, next) => {
     followers,
     taggedPics
   } = req.body;
-  // return console.log(fullName, username, email, originalPassword);
 
   // enforce password rules (can't be empty and MUST have a digit)
   if (!originalPassword || !originalPassword.match(/[0-9]/)) {
     next(new Error("Password can't be blank and must contain a number."));
     return;
   }
-
-  // return res.send(JSON.stringify(originalPassword));
 
   // encrypt the user's password before saving it
   const encryptedPassword = bcrypt.hashSync(originalPassword, 10);
@@ -67,9 +64,6 @@ router.post("/process-signup", (req, res, next) => {
 
 router.post("/process-login", (req, res, next) => {
   const { email, originalPassword } = req.body;
-
-  console.log("Req.body from Log In", req.body);
-  // return res.send("so far so good");
 
   // validate the email by searching the database for an account with that email
   User.findOne({ email: { $eq: email } })

@@ -45,7 +45,6 @@ router.get("/:username/followers", (req, res, next) => {
       res.json({
         userDoc: userDoc
       });
-      console.log(userDoc);
     })
     .catch(err => next(err));
 });
@@ -57,7 +56,6 @@ router.get("/:username/followers", (req, res, next) => {
 router.post("/process-unfollow", (req, res, next) => {
   const profileUser = req.body;
   const currentUser = req.user;
-  console.log("The profile user we are on", profileUser);
   User.findByIdAndUpdate(
     currentUser._id,
     {
@@ -81,20 +79,10 @@ router.post("/process-unfollow", (req, res, next) => {
             currentUserDoc: currentUserDoc,
             profileUserDoc: profileUserDoc
           });
-          console.log(
-            "Current User following",
-            currentUserDoc.following,
-            "Profile User follower",
-            profileUserDoc.followers
-          );
         })
         .catch(err => next(err));
     })
     .catch(err => next(err));
-  // console.log("CurrentUser id", currentUser._id);
-  // console.log("CurrentUser following", currentUser.following);
-  // console.log("ProfileUser id", profileUser._id);
-  // console.log("ProfileUser followers", profileUser.follower);
 });
 
 // #################################################
@@ -104,7 +92,6 @@ router.post("/process-unfollow", (req, res, next) => {
 router.post("/process-follow", (req, res, next) => {
   const profileUser = req.body;
   const currentUser = req.user;
-  console.log("The profile user we are on", profileUser);
   User.findByIdAndUpdate(
     currentUser._id,
     {
@@ -128,21 +115,10 @@ router.post("/process-follow", (req, res, next) => {
             currentUserDoc: currentUserDoc,
             profileUserDoc: profileUserDoc
           });
-          // console.log(
-          //   "Current User following",
-          //   currentUserDoc.following,
-          //   "Profile User follower",
-          //   profileUserDoc.followers
-          // );
         })
         .catch(err => next(err));
     })
     .catch(err => next(err));
-
-  // console.log("CurrentUser id", currentUser._id);
-  // console.log("CurrentUser following", currentUser.following);
-  // console.log("ProfileUser id", profileUser._id);
-  // console.log("ProfileUser followers", profileUser.follower);
 });
 
 // ##################################################################################
